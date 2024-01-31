@@ -1,0 +1,33 @@
+{
+	"folders": [
+		{
+			"name": "Deployment",
+			"path": "deployment"
+		},
+		{
+			"name": "Oidc service",
+			"path": "oidc-service"
+		},
+		{
+			"name": "Api service",
+			"path": "api-service"
+		},
+		{
+			"name": "Client service",
+			"path": "client-service"
+		},
+		{
+			"name": "Client",
+			"path": "client"
+		}
+	],
+	"settings": {
+		"files.autoSave": "afterDelay",
+		"files.autoSaveDelay": 3000,
+		"git.rebaseWhenSync": true,
+		"cSpell.words": [
+			"worktree",
+			"oidc"
+		]
+	}	
+}

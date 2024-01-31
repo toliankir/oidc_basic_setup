@@ -1,0 +1,7 @@
+deployment
+api-service
+oidc-service
+client
+.vscode
+
+*.local*
