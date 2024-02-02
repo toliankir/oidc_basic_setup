@@ -5,7 +5,7 @@ export const scopeMiddleware = async (req: express.Request, res: express.Respons
 	const tokenHeaderValue: string | undefined = req.headers.authorization;
 	if (!tokenHeaderValue) {
 		res.status(403);
-		res.send("Error: Auth token must be set");
+		res.send(JSON.stringify({error:"Auth token must be set"}));
 		res.end();
 		return;
 	}
@@ -13,7 +13,7 @@ export const scopeMiddleware = async (req: express.Request, res: express.Respons
 	const [tokenType, token] = tokenHeaderValue.split(" ");
 	if (tokenType !== 'Bearer') {
 		res.status(403);
-		res.send("Error: Incorrect auth token type");
+		res.send(JSON.stringify({error:"Incorrect auth token type"}));
 		res.end();
 		return;
 	}
@@ -21,9 +21,9 @@ export const scopeMiddleware = async (req: express.Request, res: express.Respons
 	try {
 		const tokenObj = await jose.decodeJwt(token);
 	} catch (err: unknown) {
-		const message = (err instanceof Object && "message" in err) ? `: ${err.message}` : "";
+		const errorMessage = (err instanceof Object && "message" in err) ? `, ${err.message}` : "";
 		res.status(403);
-		res.send(`Error: Invalid auth token${message}`);
+		res.send(JSON.stringify({error:`Invalid auth token${errorMessage}`}));
 		res.end();
 	}
 

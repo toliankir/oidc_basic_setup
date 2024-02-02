@@ -1,8 +1,5 @@
 import express from 'express';
 import { tokenMiddleware } from './middleware';
-import { User } from './postgres/models/user.model';
-import { postgresDataSource } from './postgres/postgres';
-import { randomUUID } from 'crypto';
 import { userService } from './service/user.service';
 
 const addRoutes = (app: express.Application) => {
@@ -18,15 +15,24 @@ const addRoutes = (app: express.Application) => {
 		const { login, password } = req.body;
 
 		try {
-			const userModel= await userService.addUser(login, password);
+			if (!login) {
+				throw new Error("Required parameter 'login' is missged")
+			}
+			if (!password) {
+				throw new Error("Required parameter 'password' is missged")
+			}
+
+			const userModel = await userService.addUser(login, password);
 
 			res.set("Content-Type", "application/json");
 			res.send(JSON.stringify({ id: userModel.uuid, login }));
 			res.end();
 		} catch (err) {
-			const message = (err instanceof Object && "message" in err) ? `: ${err.message}` : "";
+			const errorMessage = (err instanceof Object && "message" in err) ? err.message : null;
 			res.status(500);
-			res.send(JSON.stringify({ error: `Internal error${message}` }));
+			if (errorMessage) {
+				res.send(JSON.stringify({ error: errorMessage }));
+			}
 			res.end();
 		}
 	})

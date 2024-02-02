@@ -2,7 +2,7 @@ import express from 'express';
 import { addRoutes } from './routes';
 import { initApp } from './init';
 import * as  bodyParser from "body-parser"
-
+import cors from 'cors';
 
 const port = process.env.PORT;
 const oidcProviderUrl = process.env.OIDC_PROVIDER_URL;
@@ -14,6 +14,7 @@ if (!oidcProviderUrl) {
 }
 
 const app: express.Application = express();
+app.use(cors());
 app.use(bodyParser.json()); // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // to support URL-encoded bodies
 

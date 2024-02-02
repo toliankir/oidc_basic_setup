@@ -15,7 +15,7 @@ export const postgresDataSource = new DataSource({
     password: pgUrl.password,
     database: pgUrl.pathname.split('/')[1],
     synchronize: false,
-    logging: true,
+    logging: false,
     entities: [User],
     subscribers: [],
     migrations: [],
