@@ -1,0 +1,99 @@
+version: "3.9"
+
+networks:
+  default:
+    name: "oidc-local-tier"
+
+volumes:
+  # Unused stub volume to prevent error "volumes must be a mapping" when all volumes disabled
+  stub:
+{{#PGADMIN_USEDATAVOLUME}}
+  pgadmin-data:
+{{/PGADMIN_USEDATAVOLUME}}
+{{#POSTGRES_USEDATAVOLUME}}
+  postgres-data:
+{{/POSTGRES_USEDATAVOLUME}}
+{{#REDIS_USEDATAVOLUME}}
+  redis-data:
+{{/REDIS_USEDATAVOLUME}}
+
+services:
+#
+#  ___          __                   _                       _                     
+# |_ _| _ __   / _| _ __  __ _  ___ | |_  _ __  _   _   ___ | |_  _   _  _ __  ___ 
+#  | | | '_ \ | |_ | '__|/ _` |/ __|| __|| '__|| | | | / __|| __|| | | || '__|/ _ \
+#  | | | | | ||  _|| |  | (_| |\__ \| |_ | |   | |_| || (__ | |_ | |_| || |  |  __/
+# |___||_| |_||_|  |_|   \__,_||___/ \__||_|    \__,_| \___| \__| \__,_||_|   \___|
+#                                                                                  
+#
+
+{{#PGADMIN_RUN}}
+  pgadmin:
+    image: {{PGADMIN_IMAGE}}{{#PGADMIN_IMAGETAG}}:{{PGADMIN_IMAGETAG}}{{/PGADMIN_IMAGETAG}}
+    hostname: "{{RUN_HOSTNAME}}"
+    domainname: "{{RUN_DOMAIN}}"
+    volumes:
+{{#PGADMIN_USEDATAVOLUME}}
+      - pgadmin-data:/var/lib/pgadmin
+{{/PGADMIN_USEDATAVOLUME}}
+      - ./configs/pgadmin/servers.json:/pgadmin4/servers.json
+    depends_on:
+      - postgres
+    networks:
+      - default
+    ports:
+      - 127.0.0.1:53101:80
+    environment:
+      - 'PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED=False'
+      - 'PGADMIN_CONFIG_SERVER_MODE=False'
+      - 'PGADMIN_BG_COLOR=#C0C0C0'
+      - 'PGADMIN_DEFAULT_EMAIL=dev@in.cwtest.online'
+      - 'PGADMIN_DEFAULT_PASSWORD=devel'
+{{/PGADMIN_RUN}}
+
+  postgres:
+    image: {{POSTGRES_IMAGE}}{{#POSTGRES_IMAGETAG}}:{{POSTGRES_IMAGETAG}}{{/POSTGRES_IMAGETAG}}
+    hostname: "{{RUN_HOSTNAME}}"
+    domainname: "{{RUN_DOMAIN}}"
+    volumes:
+{{#POSTGRES_USEDATAVOLUME}}
+      - postgres-data:/data
+{{/POSTGRES_USEDATAVOLUME}}
+      - ./dbseed:/updates
+    networks:
+      - default
+    ports:
+      - 127.0.0.1:53111:5432/tcp
+
+  redis:
+    image: {{REDIS_IMAGE}}{{#REDIS_IMAGETAG}}:{{REDIS_IMAGETAG}}{{/REDIS_IMAGETAG}}
+    hostname: "{{RUN_HOSTNAME}}"
+    domainname: "{{RUN_DOMAIN}}"
+{{#REDIS_USEDATAVOLUME}}
+    volumes:
+      - redis-data:/data
+{{/REDIS_USEDATAVOLUME}}
+    networks:
+      - default
+    ports:
+      - 127.0.0.1:53113:6379/tcp
+    command: >
+      --appendonly yes
+      --requirepass devel
+
+{{#REDISCOMMANDER_RUN}}
+  redis-commander:
+    image: {{REDISCOMMANDER_IMAGE}}{{#REDISCOMMANDER_IMAGETAG}}:{{REDISCOMMANDER_IMAGETAG}}{{/REDISCOMMANDER_IMAGETAG}}
+    hostname: "{{RUN_HOSTNAME}}"
+    domainname: "{{RUN_DOMAIN}}"
+    depends_on:
+      - redis
+    networks:
+      - default
+    ports:
+      - 127.0.0.1:53103:8081/tcp
+    environment:
+      - REDIS_HOSTS=0:redis:6379:0:devel,1:redis:6379:1:devel,2:redis:6379:2:devel,3:redis:6379:3:devel
+      - 'REDIS_COMMANDER_BG_COLOR=#C0C0C0'
+
+{{/REDISCOMMANDER_RUN}}
