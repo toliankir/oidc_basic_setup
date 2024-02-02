@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/oidc-client/1.11.5/oidc-client.js"
+    integrity="sha512-pH7OSLRxkHElePmZdZIEknPr9lYKn5KC69xj/jlzKEEcdzjjMpTqzVEe+EYN/Rcay2L0nfw/X9zPOm6CXQ6B/A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body>
+  <h1>Oidc test</h1>
+
+  <button id="btn1">Login</button>
+</body>
+<script>
+    const test = async (userManager, url) => {
+    const user = await userManager.signinCallback(url);
+    console.log(user);
+  }
+
+  const btn1El = document.querySelector("#btn1");
+
+  const settings = {
+    authority: "http://localhost:4000/oidc/.well-known/openid-configuration",
+    client_id: "oidc_client",
+    redirect_uri: "http://localhost:3000",
+    response_type: "code",
+    client_secret: "a_different_secret"
+  };
+
+
+  const userManager = new Oidc.UserManager(settings);
+  test(userManager, document.location.href);
+// console.log(document.location.href)
+  console.log("userManager:", userManager);
+
+  btn1El.addEventListener("click", () => {
+    userManager
+      // .signinPopup()
+      .signinRedirect()
+      .then((data) => {
+        console.log("data:", data);
+      })
+      .catch((e) => {
+        console.log("err:", e);
+      });
+  });
+
+
+</script>
+
+</html
