@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oidc callback</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/oidc-client/1.11.5/oidc-client.js"
+        integrity="sha512-pH7OSLRxkHElePmZdZIEknPr9lYKn5KC69xj/jlzKEEcdzjjMpTqzVEe+EYN/Rcay2L0nfw/X9zPOm6CXQ6B/A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+</head>
+
+<body>
+
+</body>
+<script src="user-manager.js"></script>
+<script>
+    const signup = async (userManager, url) => {
+        const user = await userManager.signinCallback();
+        await userManager.storeUser(user);
+        window.location.href = "/";
+    }
+    signup(userManager);
+</script>
+
+</html>
