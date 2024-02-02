@@ -95,7 +95,7 @@ const configuration: Configuration = {
 			client_secret: 'a_different_secret',
 			grant_types: ['authorization_code'],
 			response_types: ['code'],
-			redirect_uris: ['http://localhost:3000']
+			redirect_uris: ['http://localhost:3000/cb']
 		}
 	]
 };

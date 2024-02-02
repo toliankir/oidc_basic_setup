@@ -16,7 +16,6 @@ FLogger.setLoggerFactory((name: string): FLogger => FLoggerConsole.create(name, 
 	format: "text"
 }));
 
-
 const port = process.env.PORT || 4000;
 FExecutionContext.setDefaultExecutionContext(new FCancellationExecutionContext(FExecutionContext.Empty, FCancellationToken.Dummy));
 

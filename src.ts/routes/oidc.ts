@@ -67,29 +67,28 @@ export const oidcRoutes = (expressApp: Application, oidcProvider: Provider) => {
 					accountId: "user.uuid",
 				},
 			};
-			await oidcProvider.interactionFinished(req, res, result, { mergeWithLastSubmission: false });
 
-			// const dbFactory: DatabaseFactory = (req as any).dbFactory;
-			// const executionContext: FExecutionContext = (req as any).executionContext;
-			// const user = await dbFactory.using(executionContext, (async (db: Database) => await db.getUser(executionContext, login)));
+			const dbFactory: DatabaseFactory = (req as any).dbFactory;
+			const executionContext: FExecutionContext = (req as any).executionContext;
+			const user = await dbFactory.using(executionContext, (async (db: Database) => await db.getUser(executionContext, login)));
 
-			// if (user === null) {
-			// 	return res.redirect('/wrong-user');
-			// }
+			if (user === null) {
+				return res.redirect('/wrong-user');
+			}
 
-			// const equal: boolean = await bcrypt.compare(password, user.password);
+			const equal: boolean = await bcrypt.compare(password, user.password);
 
-			// if (equal) {
-			// 	const result = {
-			// 		login: {
-			// 			accountId: user.uuid,
-			// 		},
-			// 	};
+			if (equal) {
+				const result = {
+					login: {
+						accountId: user.uuid,
+					},
+				};
 
-			// 	await oidcProvider.interactionFinished(req, res, result, { mergeWithLastSubmission: false });
-			// } else {
-			// 	return res.redirect('/wrong-password');
-			// }
+				await oidcProvider.interactionFinished(req, res, result, { mergeWithLastSubmission: false });
+			} else {
+				return res.redirect('/wrong-password');
+			}
 		} catch (err) {
 			next(err);
 		}
