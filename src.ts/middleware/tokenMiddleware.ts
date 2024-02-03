@@ -26,7 +26,10 @@ export const tokenMiddleware = async (req: express.Request, res: express.Respons
 	}
 
 	try {
-		await jose.jwtVerify(token, jwks);
+		const tokenDecoded = await jose.jwtVerify(token, jwks);
+		(req as any)["token"] = {
+			userUuid: tokenDecoded.payload.sub,
+		}
 	} catch (err: unknown) {
 		const message = (err instanceof Object && "message" in err) ? `, ${err.message}` : "";
 		res.status(403);

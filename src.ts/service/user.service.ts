@@ -28,6 +28,24 @@ export class UserService {
 			uuid: newUserUuid
 		}
 	}
+
+	public async getUser(uuid: string): Promise<{
+		readonly login: string;
+		readonly uuid: string;
+	}> {
+		const userRepository = this.postgres.getRepository(User)
+
+		const user = await userRepository.findOne({ where: { uuid } });
+		if (!user) {
+			throw new Error("User doesn't exists");
+		}
+
+		return {
+			login: user.login,
+			uuid: user.uuid
+		}
+	}
 }
+
 
 export const userService = new UserService(postgresDataSource);

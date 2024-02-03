@@ -9,6 +9,17 @@ const addRoutes = (app: express.Application) => {
 		res.end();
 	});
 
+	app.get("/user", tokenMiddleware, async (req: express.Request, res: express.Response) => {
+		const {userUuid} = (req as any).token;
+
+		const user = await userService.getUser(userUuid);
+
+		res.set("Content-Type", "application/json");
+		res.send(JSON.stringify(user));
+		res.end();
+	});
+
+
 	app.post("/user", async (req: express.Request, res: express.Response) => {
 		res.set("Content-Type", "application/json");
 
