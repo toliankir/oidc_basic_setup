@@ -54,5 +54,5 @@ appRoutes(app);
 oidcRoutes(app, oidcProvider);  
 
 app.listen(port, () => {
-	console.log(`Example app listening on port ${port}`);
+	console.log(`Oidc service listening on port ${port}`);
 });

@@ -42,6 +42,9 @@ const configuration: Configuration = {
 		return grant;
 		// }
 	},
+	cookies: {
+		keys: ["secretKey"]
+	},
 	jwks: {
 		keys: [{
 			"kty": "RSA",

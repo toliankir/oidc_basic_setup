@@ -62,11 +62,6 @@ export const oidcRoutes = (expressApp: Application, oidcProvider: Provider) => {
 		try {
 			const { prompt: { name } } = await oidcProvider.interactionDetails(req, res);
 			const { login, password } = req.body;
-			const result = {
-				login: {
-					accountId: "user.uuid",
-				},
-			};
 
 			const dbFactory: DatabaseFactory = (req as any).dbFactory;
 			const executionContext: FExecutionContext = (req as any).executionContext;
@@ -81,7 +76,7 @@ export const oidcRoutes = (expressApp: Application, oidcProvider: Provider) => {
 			if (equal) {
 				const result = {
 					login: {
-						accountId: user.uuid,
+						accountId: user.uuid
 					},
 				};
 
