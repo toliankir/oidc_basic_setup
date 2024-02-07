@@ -2,6 +2,7 @@ deployment
 api-service
 oidc-service
 client
+message-api-service
 .vscode
 
 *.local*

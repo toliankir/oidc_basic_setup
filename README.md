@@ -14,6 +14,7 @@ git worktree add oidc-service oidc-service-master
 git worktree add api-service api-service-master
 git worktree add deployment deployment
 git worktree add client client-master
+git worktree add message-api-service message-api-service-master
 ```
 
 ### Open VSCode Workspace

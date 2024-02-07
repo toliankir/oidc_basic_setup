@@ -13,13 +13,13 @@
 			"path": "api-service"
 		},
 		{
-			"name": "Client service",
-			"path": "client-service"
-		},
-		{
 			"name": "Client",
 			"path": "client"
-		}
+		},
+		{
+			"name": "Message api service",
+			"path": "message-api-service"
+		},
 	],
 	"settings": {
 		"files.autoSave": "afterDelay",
