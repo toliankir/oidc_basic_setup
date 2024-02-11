@@ -20,6 +20,10 @@
 			"name": "Message api service",
 			"path": "message-api-service"
 		},
+		{
+			"name": "Message client",
+			"path": "message-client"
+		},
 	],
 	"settings": {
 		"files.autoSave": "afterDelay",

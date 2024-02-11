@@ -3,6 +3,7 @@ api-service
 oidc-service
 client
 message-api-service
+message-client
 .vscode
 
 *.local*
